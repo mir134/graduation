@@ -1,32 +1,108 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Hello, World!</title>
-	</head>
-	<body>
-		<h1 id="heading"></h1>
-		<p>This page comes from a static asset stored at `public/index.html` as configured in `wrangler.jsonc`.</p>
-		<button id="button" type="button">Fetch a random UUID</button>
-		<output id="random" for="button"></output>
-		<script>
-			fetch('/message')
-				.then((resp) => resp.text())
-				.then((text) => {
-					const h1 = document.getElementById('heading');
-					h1.textContent = text;
-				});
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>2026 初三毕业纪念墙</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+	<style>
+		@font-face {
+			font-family: 'ZCOOL KuaiLe';
+			src: url('https://lib.baomitu.com/fonts/zcool-kuaile/zcool-kuaile-regular.woff2') format('woff2');
+			font-display: swap;
+		}
 
-			const button = document.getElementById("button");
-			button.addEventListener("click", () => {
-				fetch('/random')
-					.then((resp) => resp.text())
-					.then((text) => {
-						const random = document.getElementById('random');
-						random.textContent = text;
-					});
-			});
-		</script>
-	</body>
+		body {
+			background-color: #f0f2f5;
+			font-family: 'ZCOOL KuaiLe', "Microsoft YaHei", "PingFang SC", sans-serif;
+		}
+
+		.handwriting {
+			font-family: 'ZCOOL KuaiLe', cursive;
+		}
+
+		.sticky-note:hover {
+			transform: scale(1.4) rotate(0deg) !important;
+			box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.15);
+		}
+
+		.sticky-note {
+			position: absolute;
+			cursor: grab;
+			user-select: none;
+			touch-action: none;
+		}
+
+		.sticky-note:active {
+			cursor: grabbing;
+			transform: scale(1.3) rotate(0deg) !important;
+			box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.15);
+		}
+	</style>
+</head>
+<body class="pb-20">
+	<div class="relative overflow-hidden bg-indigo-900 text-white py-10 px-4 mb-12 shadow-2xl">
+		<div class="absolute top-0 left-0 w-full h-full opacity-20"
+			style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 20px 20px;"></div>
+		<div class="relative z-10 max-w-5xl mx-auto text-center">
+			<h1 class="text-4xl md:text-7xl font-black mb-4">NEXT STATION</h1>
+			<p class="text-xl md:text-2xl opacity-80">2026届毕业纪念 · 青春不散场</p>
+			<p class="text-xl md:text-2xl opacity-80">嘿！我是 [名字]</p>
+			<p class="text-xl md:text-2xl opacity-80">初中三年，很高兴遇见你们。这是我为你准备的数字纪念册。</p>
+		</div>
+	</div>
+	<div class="max-w-6xl mx-auto px-4">
+		<div class="max-w-xl mx-auto mb-16">
+			<div class="bg-white/80 backdrop-blur-md p-8 rounded-3xl shadow-xl border border-white">
+				<h2 class="text-2xl font-bold mb-6 text-gray-800 flex items-center"><span class="mr-2">✍️</span> 留下你的足迹</h2>
+				<div class="space-y-4">
+					<div class="flex gap-4">
+						<input id="name" type="text" placeholder="名字"
+							class="w-1/3 p-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-indigo-400 outline-none">
+						<input id="contact" type="text" placeholder="微信/QQ/手机"
+							class="w-2/3 p-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-indigo-400 outline-none">
+					</div>
+					<textarea id="content" placeholder="此时此刻，你想说什么？"
+						class="w-full p-3 bg-gray-50 border-none rounded-xl h-24 focus:ring-2 focus:ring-indigo-400 outline-none"></textarea>
+					<button onclick="submit()" id="btn"
+						class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-4 rounded-xl font-bold text-lg hover:shadow-lg hover:opacity-90 transition transform active:scale-95">把思念寄出</button>
+				</div>
+			</div>
+		</div>
+		<div id="list" class="relative w-full min-h-[1200px] mt-10"></div>
+	</div>
+	<div id="live-chat" class="fixed bottom-6 left-2 z-50 pointer-events-none space-y-2 max-w-xs"></div>
+	<style>
+		.chat-bubble {
+			background: rgba(0, 0, 0, 0.6);
+			backdrop-filter: blur(1px);
+			color: white;
+			padding: 8px 12px;
+			border-radius: 12px;
+			font-size: 0.9rem;
+			animation: slideInUp 0.5s ease-out;
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+			border-left: 5px solid #818cf8;
+		}
+
+		@keyframes slideInUp {
+			from {
+				transform: translateY(100%);
+				opacity: 0;
+			}
+
+			to {
+				transform: translateY(0);
+				opacity: 1;
+			}
+		}
+
+		.fade-out {
+			opacity: 0;
+			transform: translateY(-100%);
+			transition: all 0.5s ease;
+		}
+	</style>
+	<script src="./index.js"></script>
+</body>
 </html>
