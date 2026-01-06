@@ -23,7 +23,8 @@ export default {
 							id: m.id,
 							content: m.content,
 							name: name.length <= 2 ? (name[0] ? name[0] + '*' : '') : (name[0] + '*'.repeat(Math.max(0, name.length - 2)) + name.slice(-1)),
-							contact: (/^\d{11}$/.test(contact)) ? contact.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') : (contact.length > 4 ? contact.slice(0, 2) + '****' + contact.slice(-2) : '****')
+							contact: (/^\d{11}$/.test(contact)) ? contact.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') : (contact.length > 4 ? contact.slice(0, 2) + '****' + contact.slice(-2) : '****'),
+							created_at: m.created_at
 						};
 					});
 
@@ -35,6 +36,32 @@ export default {
 					try {
 						const { name, contact, content } = await request.json();
 						if (!name || !content) return new Response(JSON.stringify({ error: 'Missing fields' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+
+						// 防止频繁提交：基于 IP 和 contact 的 60 秒内重复提交限制
+						const ip = request.headers.get('CF-Connecting-IP') || request.headers.get('x-forwarded-for') || 'unknown';
+						const now = Date.now();
+
+						// 确保限流表存在
+						// await env.DB.prepare('CREATE TABLE IF NOT EXISTS rate_limits (key TEXT PRIMARY KEY, last_at INTEGER)').run();
+
+						const checkAndUpdate = async (key) => {
+							const row = await env.DB.prepare('SELECT last_at FROM rate_limits WHERE key = ?').bind(key).first();
+							if (row && (now - row.last_at) < 60_000) return false;
+							await env.DB.prepare('INSERT OR REPLACE INTO rate_limits (key, last_at) VALUES (?, ?)').bind(key, now).run();
+							return true;
+						};
+
+						const ipKey = `ip:${ip}`;
+						if (!await checkAndUpdate(ipKey)) {
+							return new Response(JSON.stringify({ error: 'Too many requests' }), { status: 429, headers: { 'Content-Type': 'application/json' } });
+						}
+
+						if (contact) {
+							const contactKey = `contact:${contact}`;
+							if (!await checkAndUpdate(contactKey)) {
+								return new Response(JSON.stringify({ error: 'Too many requests' }), { status: 429, headers: { 'Content-Type': 'application/json' } });
+							}
+						}
 
 						await env.DB.prepare('INSERT INTO messages (name, contact, content) VALUES (?, ?, ?)')
 							.bind(name, contact, content)

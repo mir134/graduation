@@ -1,6 +1,6 @@
 -- 毕业纪念册预置留言数据
 -- 字段顺序: name, contact, content
--- wrangler d1 execute graduation-db --remote --file=./seed.sql
+-- wrangler d1 execute graduation-db --remote --file=./script/seed.sql
 
 INSERT INTO messages (name, contact, content) VALUES 
 ('物理课代表', '13812345678', '中考完了，现在的我，除了“重力”，已经感受不到任何“力”了。大家江湖再见，记得别在物理卷子上找我！'),

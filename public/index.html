@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="/favicon.ico" rel="icon">
 	<title>2026 初三毕业纪念墙</title>
 	<script src="https://cdn.tailwindcss.com"></script>
 	<style>
@@ -13,7 +14,7 @@
 		}
 
 		body {
-			background-color: #f0f2f5;
+			background-color: oklch(90.1% 0.076 70.697);
 			font-family: 'ZCOOL KuaiLe', "Microsoft YaHei", "PingFang SC", sans-serif;
 		}
 
@@ -69,7 +70,7 @@
 				</div>
 			</div>
 		</div>
-		<div id="list" class="relative w-full min-h-[1200px] mt-10"></div>
+		<div id="message-list" class="relative w-full min-h-[1200px] mt-10"></div>
 	</div>
 	<div id="live-chat" class="fixed bottom-6 left-2 z-50 pointer-events-none space-y-2 max-w-xs"></div>
 	<style>
@@ -81,7 +82,7 @@
 			border-radius: 12px;
 			font-size: 0.9rem;
 			animation: slideInUp 0.5s ease-out;
-			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 			border-left: 5px solid #818cf8;
 		}
 
@@ -103,6 +104,6 @@
 			transition: all 0.5s ease;
 		}
 	</style>
-	<script src="./index.js"></script>
+	<script src="/index.js"></script>
 </body>
 </html>

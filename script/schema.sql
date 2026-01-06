@@ -6,5 +6,6 @@ CREATE TABLE IF NOT EXISTS messages (
   content TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+CREATE TABLE IF NOT EXISTS rate_limits (key TEXT PRIMARY KEY, last_at INTEGER);
 -- wrangler d1 create graduation-db
 -- wrangler d1 execute graduation-db --local --file=./script/schema.sql
