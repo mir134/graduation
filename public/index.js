@@ -56,7 +56,7 @@ async function load() {
     let randomY = Math.floor(Math.random() * 800 - 50);
     if (index === 0) { 
       randomY = isMobile ? -90 : -408; 
-      randomX = isMobile ? 0 : 30
+      randomX = isMobile ? 0 : 0
     } else if (index === 1) { 
       randomY = isMobile ? -90 : -408; 
       randomX = isMobile ? 204 : 920; 
